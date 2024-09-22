@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .register
+        {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+
+            .container
+            {
+                height:400px;
+                width: 250px;
+                background-color: aqua;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+
+                input
+                {
+                    height: 20px;
+                    width: 80%;
+             
+                }
+
+                p
+                {
+                    color: red;
+                    font-weight: bold
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register">
+        <div class="container">
+            <input type="text" placeholder="Enter user name" id="user">
+            <input type="text" placeholder="enter user address" id="address">
+            
+            <button>Submit</button>
+            <p id="error"></p>
+        </div>
+    </div>
+<script>
+
+
+
+    const button=document.querySelector('button')
+
+    button.addEventListener('click',function(e){
+        e.preventDefault();
+        const user=document.getElementById('user').value;
+    const address=document.getElementById('address').value;
+    const error=document.getElementById('error');
+    if(user=='' || address=='')
+    {
+        error.innerHTML="Please enter user details"
+    }
+    else
+    {
+        myFunction(user, address);
+    }
+    
+    })
+
+    function myFunction(user, address) {
+    this.user=user;
+    this.address=address;
+            fetch('http://localhost:8000/registerUser', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user, address })
+            })
+            .then((response) => {
+                if(response.status===409)
+            {
+                alert("user already exist!");
+            }
+            else{alert("Registered")}
+            
+                
+                
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+   
+</script>
+</body>
+</html>
